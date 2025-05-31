@@ -14,8 +14,13 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:5173")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+                        .allowedOrigins(
+                                "http://localhost:5173",
+                                "http://cooper-budget-app.s3-website-us-east-1.amazonaws.com",
+                                "https://cooper-budget-app.s3-website-us-east-1.amazonaws.com"
+                                )
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*");
             }
         };
     }
