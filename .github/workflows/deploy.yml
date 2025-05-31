@@ -13,6 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Maven clean package
+        run: mvn clean package -DskipTests
+        working-directory: ./backend
+
       - name: Copy backend to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
