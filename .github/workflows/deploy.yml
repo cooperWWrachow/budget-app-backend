@@ -23,14 +23,15 @@ jobs:
         run: mvn clean package -DskipTests
         working-directory: ./backend
 
-      - name: Clean backend folder on EC2
+      - name: Clean backend build artifacts on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            rm -rf ~/backend/*
+            rm -rf ~/backend/target
+            rm -rf ~/backend/src/main/java/com/budgetapp/backend/config/WebConfig.java
 
       - name: Copy backend to EC2
         uses: appleboy/scp-action@v0.1.7
