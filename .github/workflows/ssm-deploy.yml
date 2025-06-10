@@ -1,9 +1,7 @@
 name: Deploy via SSM
 
 on:
-  push:
-    branches:
-      - prod
+  workflow_dispatch:
 
 jobs:
   ssm-deploy:
