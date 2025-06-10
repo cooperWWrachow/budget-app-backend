@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   app:
-    build: .
+    image: 992382528924.dkr.ecr.us-east-1.amazonaws.com/budget-app-springboot-backend
     container_name: budget-backend
     ports:
       - "8080:8080"
