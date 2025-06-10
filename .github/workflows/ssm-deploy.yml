@@ -1,0 +1,25 @@
+name: Deploy via SSM
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ssm-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Trigger EC2 Deployment via SSM
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy backend container from ECR" \
+            --targets "Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
+            --parameters 'commands=["docker pull 992382528924.dkr.ecr.us-east-1.amazonaws.com/budget-app-springboot-backend:latest","cd ~/backend","docker-compose -f docker-compose.prod.yml down","docker system prune -f","docker-compose -f docker-compose.prod.yml up -d"]' \
+            --timeout-seconds 600 \
+            --region us-east-1
