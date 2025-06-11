@@ -6,6 +6,7 @@ on:
 jobs:
   ssm-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -20,6 +21,13 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Deploy backend container from ECR" \
             --targets "Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
-            --parameters 'commands=["docker pull 992382528924.dkr.ecr.us-east-1.amazonaws.com/budget-app-springboot-backend:latest","cd ~/backend","docker-compose -f docker-compose.prod.yml down","docker system prune -f","docker-compose -f docker-compose.prod.yml up -d"]' \
+            --parameters 'commands=[
+              "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 992382528924.dkr.ecr.us-east-1.amazonaws.com",
+              "docker pull 992382528924.dkr.ecr.us-east-1.amazonaws.com/budget-app-springboot-backend:latest",
+              "cd ~/backend",
+              "docker-compose -f docker-compose.prod.yml down",
+              "docker system prune -f",
+              "docker-compose -f docker-compose.prod.yml up -d"
+            ]' \
             --timeout-seconds 600 \
             --region us-east-1
