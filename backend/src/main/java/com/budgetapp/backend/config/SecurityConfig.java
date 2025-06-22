@@ -21,7 +21,14 @@ public class SecurityConfig {
         http
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+                .authorizeHttpRequests(auth -> auth
+//                        #### this is where you define routes that bypass the authentication requirement
+                        .requestMatchers("/api/hello").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(withDefaults())
+                );
 
         return http.build();
     }
@@ -31,6 +38,9 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:5173",
+                "http://localhost:4200",
+                "http://angular-budget-app.s3-website-us-east-1.amazonaws.com",
+                "https://angular-budget-app.s3-website-us-east-1.amazonaws.com",
                 "http://cooper-budget-app.s3-website-us-east-1.amazonaws.com",
                 "https://cooper-budget-app.s3-website-us-east-1.amazonaws.com"
         ));
