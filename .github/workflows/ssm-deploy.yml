@@ -19,7 +19,7 @@ jobs:
         run: |
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --comment "Deploy backend container from ECR" \
+            --comment "Deploy backend container from ECR with Neon DB" \
             --targets "Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
             --parameters 'commands=[
               "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 992382528924.dkr.ecr.us-east-1.amazonaws.com",
