@@ -34,3 +34,10 @@ jobs:
             ]' \
             --timeout-seconds 600 \
             --region us-east-1
+
+      - name: Check SSM Command Status
+        run: |
+          aws ssm list-command-invocations \
+            --region us-east-1 \
+            --details \
+            --output table
