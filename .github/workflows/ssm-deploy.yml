@@ -21,13 +21,10 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Deploy backend container from ECR with Neon DB" \
             --targets "Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
-            --parameters 'commands=["aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 992382528924.dkr.ecr.us-east-1.amazonaws.com",
-            "docker pull 992382528924.dkr.ecr.us-east-1.amazonaws.com/budget-app-springboot-backend:latest",
-            "docker stop backend || true",
-            "docker rm backend || true",
-            "docker run -d --name backend -p 8080:8080 -e SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL} -e SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME} -e SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD} -e SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE} 992382528924.dkr.ecr.us-east-1.amazonaws.com/budget-app-springboot-backend:latest"]'
+            --parameters 'commands=["aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 992382528924.dkr.ecr.us-east-1.amazonaws.com","docker pull 992382528924.dkr.ecr.us-east-1.amazonaws.com/budget-app-springboot-backend:latest","docker stop backend || true","docker rm backend || true","docker run -d --name backend -p 8080:8080 -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} -e SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE }} 992382528924.dkr.ecr.us-east-1.amazonaws.com/budget-app-springboot-backend:latest"]' \
             --timeout-seconds 600 \
             --region us-east-1
+
 
 
       - name: Check SSM Command Status
